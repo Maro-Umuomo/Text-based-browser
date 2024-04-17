@@ -1,5 +1,6 @@
 import os
 import sys
+from collections import deque
 
 nytimes_com = '''
 This New Liquid Is Magnetic, and Mesmerizing
@@ -58,15 +59,23 @@ directory_name = args[1]
 create_directory(directory_name)
 os.chdir(directory_name)
 
+open_tabs = deque()
+
 
 def process_user_input(user_input):
     match user_input:
         case "nytimes.com":
             create_web_file("nytimes", nytimes_com)
-            print(nytimes_com)
+            open_tabs.append(nytimes_com)
+            print(open_tabs[-1])
         case "bloomberg.com":
             create_web_file("bloomberg", bloomberg_com)
-            print(bloomberg_com)
+            open_tabs.append(bloomberg_com)
+            print(open_tabs[-1])
+        case "back":
+            if len(open_tabs) > 1:
+                open_tabs.pop()
+                print(open_tabs[-1])
         case "exit":
             quit()
         case _:
